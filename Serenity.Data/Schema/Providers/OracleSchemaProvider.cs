@@ -75,10 +75,10 @@ namespace Serenity.Data.Schema
 
         public IEnumerable<TableName> GetTableNames(IDbConnection connection)
         {
-            return connection.Query("SELECT owner, table_name FROM all_tables")
+            return connection.Query("SELECT username, table_name FROM user_tables, user_users")
                 .Select(x => new TableName
                 {
-                    Schema = x.OWNER,
+                    Schema = x.USERNAME,
                     Table = x.TABLE_NAME
                 });
         }

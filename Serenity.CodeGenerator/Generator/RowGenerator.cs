@@ -378,7 +378,7 @@ namespace Serenity.CodeGenerator
         public static string ClassNameFromTableName(string tableName)
         {
             tableName = tableName.Replace(" ", "");
-            if (tableName.StartsWith("tb_"))
+            if (tableName.StartsWith("BT_"))
                 tableName = tableName.Substring(3);
             else if (tableName.StartsWith("aspnet_"))
                 tableName = "AspNet" + tableName.Substring(7);
