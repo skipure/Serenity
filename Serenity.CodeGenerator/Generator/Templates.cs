@@ -17,8 +17,8 @@ namespace Serenity.CodeGenerator
         private static Scriban.Template GetTemplate(string templateKey)
         {
             Scriban.Template t;
-            if (templateCache.TryGetValue(templateKey, out t))
-                return t;
+            //if (templateCache.TryGetValue(templateKey, out t))
+            //    return t;
 
             string template = null;
 

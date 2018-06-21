@@ -44,7 +44,7 @@ namespace Serenity.CodeGenerator
         public void Run()
         {
             Directory.CreateDirectory(Path.GetDirectoryName(rootDir));
-
+            
             if (config.GenerateRow)
             {
                 CreateFile(Templates.Render("Row", model), moduleClass + "Row.cs");

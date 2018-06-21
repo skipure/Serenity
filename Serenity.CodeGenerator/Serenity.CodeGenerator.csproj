@@ -17,7 +17,13 @@
     <EmbeddedResource Include="..\Serenity.Web\Tooling\JsEngine\typescriptServices.js">
       <Link>typeScriptServices.js</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Bartlett\DataMapper.scriban" />
     <EmbeddedResource Include="Templates\*.scriban" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Templates\Bartlett\**" />
+    <EmbeddedResource Remove="Templates\Bartlett\**" />
+    <None Remove="Templates\Bartlett\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Serenity.Services\Serenity.Services.csproj" />

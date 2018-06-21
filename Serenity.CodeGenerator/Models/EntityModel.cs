@@ -60,7 +60,7 @@ namespace Serenity.CodeGenerator
 
         public string SchemaAndTable
         {
-            get { return string.IsNullOrEmpty(Schema)? Tablename : "[" + Schema + "].[" + Tablename + "]"; }
+            get { return string.IsNullOrEmpty(Schema)? Tablename : Schema + "." + Tablename; }
         }
 
         public string RowBaseClassAndInterfaces
