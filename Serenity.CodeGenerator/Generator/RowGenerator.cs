@@ -69,7 +69,7 @@ namespace Serenity.CodeGenerator
             return "any";
         }
 
-        private static EntityField ToEntityField(FieldInfo fieldInfo, int prefixLength)
+        private static EntityField ToEntityField(ISchemaProvider schemaProvider, FieldInfo fieldInfo, int prefixLength)
         {
             string flags;
             if (fieldInfo.IsIdentity)
@@ -84,7 +84,7 @@ namespace Serenity.CodeGenerator
                 flags = null;
 
             string dataType;
-            var fieldType = SchemaHelper.SqlTypeNameToFieldType(fieldInfo.DataType, fieldInfo.Size, out dataType);
+            var fieldType = schemaProvider.SqlTypeNameToFieldType(fieldInfo.DataType, fieldInfo.Size, out dataType);
             dataType = dataType ?? fieldType;
             return new EntityField
             {
@@ -111,6 +111,11 @@ namespace Serenity.CodeGenerator
                 model.Schema = null;
             else
                 model.Schema = tableSchema;
+
+            if (connection.GetDialect().ServerType.StartsWith("Oracle", StringComparison.OrdinalIgnoreCase))
+                model.HasSequence = true;
+            else
+                model.HasSequence = false;
 
             model.Permission = permission;
             model.ConnectionKey = connectionKey;
@@ -224,7 +229,7 @@ namespace Serenity.CodeGenerator
                 {
                     if (baseRowFieldset.Contains(f.FieldName.Substring(prefix)))
                     {
-                        var ef = ToEntityField(f, prefix);
+                        var ef = ToEntityField(schemaProvider, f, prefix);
                         ef.Flags = null;
                         model.RowBaseFields.Add(ef);
                         return false;
@@ -243,10 +248,13 @@ namespace Serenity.CodeGenerator
 
             foreach (var field in fields)
             {
-                var f = ToEntityField(field, prefix);
+                var f = ToEntityField(schemaProvider, field, prefix);
 
                 if (f.Ident == model.IdField)
+                {
+                    f.IsPK = true;
                     f.ColAttributes = "EditLink, DisplayName(\"Db.Shared.RecordId\"), AlignRight";
+                }
 
                 int i = 0;
                 string ident = f.Ident;
@@ -288,7 +296,7 @@ namespace Serenity.CodeGenerator
                         if (frg.FieldName.Equals(foreign.PKColumn, StringComparison.OrdinalIgnoreCase))
                             continue;
 
-                        var k = ToEntityField(frg, frgPrefix);
+                        var k = ToEntityField(schemaProvider, frg, frgPrefix);
                         k.Flags = null;
                         k.Title = Inflector.Inflector.Titleize(JU(j.Name, frg.FieldName.Substring(frgPrefix)));
                         k.Ident = JI(j.Name, k.Ident);

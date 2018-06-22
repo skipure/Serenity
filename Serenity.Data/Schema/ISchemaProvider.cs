@@ -11,5 +11,6 @@ namespace Serenity.Data.Schema
         IEnumerable<string> GetPrimaryKeyFields(IDbConnection connection, string schema, string table);
         IEnumerable<TableName> GetTableNames(IDbConnection connection);
         IEnumerable<FieldInfo> GetFieldInfos(IDbConnection connection, string schema, string table);
+        string SqlTypeNameToFieldType(string sqlTypeName, int size, out string dataType);
     }
 }

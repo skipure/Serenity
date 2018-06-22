@@ -13,6 +13,7 @@
         public string PKTable { get; set; }
         public string PKColumn { get; set; }
         public string ForeignJoinAlias { get; set; }
+        public bool IsPK { get; set; } = false;
         public bool Insertable { get; set; }
         public bool Updatable { get; set; }
         public bool IsValueType { get; set; }

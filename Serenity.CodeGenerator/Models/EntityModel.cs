@@ -24,6 +24,7 @@ namespace Serenity.CodeGenerator
         public string NameField { get; set; }
         public string FieldPrefix { get; set; }
         public bool AspNetCore { get; set; }
+        public bool HasSequence { get; set; }
 
         public string IdField { get { return Identity; } }
         public Dictionary<string, object> CustomSettings { get; set; }
@@ -61,6 +62,11 @@ namespace Serenity.CodeGenerator
         public string SchemaAndTable
         {
             get { return string.IsNullOrEmpty(Schema)? Tablename : Schema + "." + Tablename; }
+        }
+
+        public string SequenceName
+        {
+            get { return Tablename.Replace("BT_", "SEQ_"); }
         }
 
         public string RowBaseClassAndInterfaces

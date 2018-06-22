@@ -268,5 +268,10 @@ namespace Serenity.Data.Schema
                     return "unknown";
             }
         }
+
+        public string SqlTypeNameToFieldType(string sqlTypeName, int size, out string dataType)
+        {
+            return SchemaHelper.SqlTypeNameToFieldType(sqlTypeName, size, out dataType);
+        }
     }
 }
