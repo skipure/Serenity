@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Infrastructure.Domain;
+
+namespace {{RootNamespace}}.Models
+{
+	public class {{ClassName}} : BaseModel
+	{
+		public {{ClassName}}()
+		{
+		}
+
+{{~for x in Fields}}		public {{x.PropertyType}} {{x.Ident}} { get; set; }
+{{end}}
+	}
+}

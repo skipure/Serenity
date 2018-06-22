@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using {{RootNamespace}}.Models;
+using Dapper;
+
+namespace {{RootNamespace}}
+{
+	public class {{ClassName}}DataMapper : BaseDataMapper<{{ClassName}}>
+	{
+		public {{ClassName}}DataMapper() { }
+		public {{ClassName}}DataMapper(System.Data.IDbConnection connection)
+		{
+			this.Connection = connection;
+		}
+
+		public override {{ClassName}} Map(dynamic result)
+		{
+			return new {{ClassName}}
+			{
+{{~for x in Fields}}				{{x.Ident}} = result.{{x.Name}}{{if !for.last}},{{end}}
+{{end}}			};
+		}
+
+		protected override string TableName
+		{
+			get { return "{{SchemaAndTable}}"; }
+		}{{if HasSequence}}
+
+		public decimal GetNextSequence()
+		{
+			return Query("SELECT {{SequenceName}}.NEXTVAL as ID FROM DUAL").First().ID;
+		}{{end}}
+
+		public void Insert({{ClassName}} model)
+		{
+			Execute("INSERT INTO " + TableName + @" ({{~for x in Fields}}{{x.Name}},{{end}}{{~for x in RowBaseFields}}{{x.Name}}{{if !for.last}},{{end}}{{end}}) 
+			VALUES({{~for x in Fields}}:{{x.Ident}},{{end}}{{~for x in RowBaseFields}}:{{x.Ident}}{{if !for.last}},{{end}}{{end}})", model);
+		}
+		
+		public void Update(StatementGeneration model)
+		{
+			Execute("UPDATE " + TableName + @" SET {{~for x in Fields}}{{if !x.IsPK}} {{x.Name}}=:{{x.Ident}},{{end}}{{end}}{{~for x in RowBaseFields}} {{x.Name}}=:{{x.Ident}}{{if !for.last}},{{end}}{{end}} WHERE {{~for x in Fields}}{{if x.IsPK}} {{x.Name}}=:{{x.Ident}}{{end}}{{end}}", model);
+		}
+	}
+}
